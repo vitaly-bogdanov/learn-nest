@@ -4,7 +4,7 @@ import { CommentService } from './comment.service';
 import { CommentController } from './comment.controller';
 
 @Module({
-    controllers: [CommentController],
-    providers: [CommentService, PrismaService]
+  controllers: [CommentController],
+  providers: [CommentService, PrismaService],
 })
-export class CommentModule {};
+export class CommentModule {}

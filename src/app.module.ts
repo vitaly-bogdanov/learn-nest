@@ -5,6 +5,6 @@ import { ArtistModule } from './artist/artist.module';
 import { CommentModule } from './comment/comment.module';
 
 @Module({
-    imports: [TrackModule, AlbumModule, ArtistModule, CommentModule]
+  imports: [TrackModule, AlbumModule, ArtistModule, CommentModule],
 })
-export class AppModule {};
+export class AppModule {}

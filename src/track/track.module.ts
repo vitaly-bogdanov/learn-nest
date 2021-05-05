@@ -4,7 +4,7 @@ import { TrackService } from './track.service';
 import { PrismaService } from '../prisma.service';
 
 @Module({
-    controllers: [TrackController],
-    providers: [TrackService, PrismaService]
+  controllers: [TrackController],
+  providers: [TrackService, PrismaService],
 })
-export class TrackModule {};
+export class TrackModule {}
