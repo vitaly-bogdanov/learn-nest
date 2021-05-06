@@ -23,7 +23,7 @@ export class AlbumService {
   }
 
   async getOne(where: Prisma.AlbumWhereUniqueInput): Promise<Album | null> {
-    return this.prisma.album.findUnique({ where });
+    return this.prisma.album.findUnique({ where, include: { tracks: true } });
   }
 
   async delete(where: Prisma.AlbumWhereUniqueInput): Promise<Album> {

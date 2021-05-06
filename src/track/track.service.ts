@@ -23,7 +23,7 @@ export class TrackService {
   }
 
   async getOne(where: Prisma.TrackWhereUniqueInput): Promise<Track | null> {
-    return this.prismaService.track.findUnique({ where });
+    return this.prismaService.track.findUnique({ where, include: { comments: true } });
   }
 
   async delete(where: Prisma.TrackWhereUniqueInput): Promise<Track> {
