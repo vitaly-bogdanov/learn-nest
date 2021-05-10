@@ -10,6 +10,7 @@ datasource db {
 model Artist {
   id     Int     @id @default(autoincrement())
   name   String
+  slug   String
   albums Album[]
   tracks Track[]
 }
@@ -17,6 +18,8 @@ model Artist {
 model Album {
   id       Int     @id @default(autoincrement())
   artistId Int?
+  name     String
+  slug     String
   artist   Artist? @relation(fields: [artistId], references: [id])
   tracks   Track[]
 }
@@ -27,6 +30,7 @@ model Track {
   name     String
   picture  String
   audio    String
+  slug     String
   artistId Int?
   albumId  Int?
   album    Album?    @relation(fields: [albumId], references: [id])

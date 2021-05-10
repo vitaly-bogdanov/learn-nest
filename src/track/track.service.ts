@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Track, Prisma } from '@prisma/client';
 import { Express } from 'express';
-
+import { SlugifyService } from '../slugify.service';
 import { PrismaService } from '../prisma.service';
 import { FileService, FileType } from '../file.service';
 
@@ -9,7 +9,8 @@ import { FileService, FileType } from '../file.service';
 export class TrackService {
   constructor(
     private prismaService: PrismaService,
-    private fileService: FileService
+    private fileService: FileService,
+    private slugifyService: SlugifyService
   ) {}
 
   async create(
@@ -19,7 +20,8 @@ export class TrackService {
   ): Promise<Track> {
     const audioPath = this.fileService.createFile(FileType.AUDIO, audio);
     const picturePath = this.fileService.createFile(FileType.IMAGE, picture);
-    return this.prismaService.track.create({ data: {...data, picture: picturePath, audio: audioPath } });
+    const slug: string = this.slugifyService.toSlug(data.name);
+    return this.prismaService.track.create({ data: {...data, slug, picture: picturePath, audio: audioPath } });
   }
 
   async update(params: {
@@ -44,8 +46,7 @@ export class TrackService {
 
   async listen(id: number): Promise<Track> {
     const track = await this.prismaService.track.findUnique({ where: { id } });
-    const listens = track.listens + 1;
-    return this.prismaService.track.update({ data: { listens: listens }, where: { id }});
+    return this.prismaService.track.update({ data: { listens: track.listens + 1 }, where: { id }});
   }
 
   async search(query: string): Promise<Track[]> {

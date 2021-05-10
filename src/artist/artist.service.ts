@@ -1,13 +1,18 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma.service';
+import { SlugifyService } from '../slugify.service';
 import { Artist, Prisma } from '@prisma/client';
 
 @Injectable()
 export class ArtistService {
-  constructor(private prismaService: PrismaService) {}
+  constructor(
+    private prismaService: PrismaService,
+    private slugifyService: SlugifyService
+  ) {}
 
   async create(data: Prisma.ArtistCreateInput): Promise<Artist> {
-    return this.prismaService.artist.create({ data });
+    const slug: string = this.slugifyService.toSlug(data.name);
+    return this.prismaService.artist.create({ data: { ...data, slug } });
   }
 
   async getAll(): Promise<Artist[]> {

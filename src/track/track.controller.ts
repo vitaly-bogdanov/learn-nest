@@ -13,11 +13,12 @@ import {
 import { TrackService } from './track.service';
 import { Track, Prisma } from '@prisma/client';
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
-import { Express } from 'express';
 
 @Controller('/tracks')
 export class TrackController {
-  constructor(private trackService: TrackService) {}
+  constructor(
+    private trackService: TrackService
+  ) {}
 
   @Post()
   @UseInterceptors(FileFieldsInterceptor([
@@ -41,21 +42,21 @@ export class TrackController {
   }
 
   @Get()
-  getAll(
+  getTracks(
     @Query('count') count: string = '10',
     @Query('offset') offset: string = '0'
   ): Promise<Track[]> {
     return this.trackService.getAll(count, offset);
   }
 
-  @Get('/search')
-  search(@Query('query') query: string): Promise<Track[]> {
-    return this.trackService.search(query);
-  }
-
   @Get(':id')
   getTrackById(@Param('id') id: string): Promise<Track> {
     return this.trackService.getOne({ id: Number(id) });
+  }
+
+  @Get('/search')
+  search(@Query('query') query: string): Promise<Track[]> {
+    return this.trackService.search(query);
   }
 
   @Delete(':id')

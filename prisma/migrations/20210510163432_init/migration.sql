@@ -1,12 +1,16 @@
 -- CreateTable
 CREATE TABLE "Artist" (
-    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
+    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "name" TEXT NOT NULL,
+    "slug" TEXT NOT NULL
 );
 
 -- CreateTable
 CREATE TABLE "Album" (
     "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     "artistId" INTEGER,
+    "name" TEXT NOT NULL,
+    "slug" TEXT NOT NULL,
     FOREIGN KEY ("artistId") REFERENCES "Artist" ("id") ON DELETE SET NULL ON UPDATE CASCADE
 );
 
@@ -17,10 +21,11 @@ CREATE TABLE "Track" (
     "name" TEXT NOT NULL,
     "picture" TEXT NOT NULL,
     "audio" TEXT NOT NULL,
+    "slug" TEXT NOT NULL,
     "artistId" INTEGER,
     "albumId" INTEGER,
-    FOREIGN KEY ("artistId") REFERENCES "Artist" ("id") ON DELETE SET NULL ON UPDATE CASCADE,
-    FOREIGN KEY ("albumId") REFERENCES "Album" ("id") ON DELETE SET NULL ON UPDATE CASCADE
+    FOREIGN KEY ("albumId") REFERENCES "Album" ("id") ON DELETE SET NULL ON UPDATE CASCADE,
+    FOREIGN KEY ("artistId") REFERENCES "Artist" ("id") ON DELETE SET NULL ON UPDATE CASCADE
 );
 
 -- CreateTable
