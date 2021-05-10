@@ -30,8 +30,8 @@ export class TrackService {
     return this.prismaService.track.update({ data, where });
   }
 
-  async getAll(count: number = 10, offset: number = 0): Promise<Track[]> {
-    return this.prismaService.track.findMany({ skip: offset, take: count });
+  async getAll(count: string, offset: string): Promise<Track[]> {
+    return this.prismaService.track.findMany({ skip: Number(offset), take: Number(count) });
   }
 
   async getOne(where: Prisma.TrackWhereUniqueInput): Promise<Track | null> {
@@ -42,9 +42,10 @@ export class TrackService {
     return this.prismaService.track.delete({ where });
   }
 
-  async listen(id: number): Promise<void> {
+  async listen(id: number): Promise<Track> {
     const track = await this.prismaService.track.findUnique({ where: { id } });
-    this.prismaService.track.update({ data: { listens: track.listens + 1 }, where: { id }});
+    const listens = track.listens + 1;
+    return this.prismaService.track.update({ data: { listens: listens }, where: { id }});
   }
 
   async search(query: string): Promise<Track[]> {

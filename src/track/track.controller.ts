@@ -42,10 +42,10 @@ export class TrackController {
 
   @Get()
   getAll(
-    @Query('count') count: string,
-    @Query('offset') offset: string
+    @Query('count') count: string = '10',
+    @Query('offset') offset: string = '0'
   ): Promise<Track[]> {
-    return this.trackService.getAll(Number(count), Number(offset));
+    return this.trackService.getAll(count, offset);
   }
 
   @Get('/search')
@@ -63,8 +63,8 @@ export class TrackController {
     return this.trackService.delete({ id: Number(id) });
   }
 
-  @Post(':id')
-  listen(@Param('id') id: string) {
+  @Put('listens/:id')
+  listen(@Param('id') id: string): void {
     this.trackService.listen(Number(id));
   }
 }
