@@ -10,10 +10,13 @@ import {
   UploadedFiles,
   Query
 } from '@nestjs/common';
+import { ApiTags, ApiParam} from '@nestjs/swagger';
 import { TrackService } from './track.service';
 import { Track, Prisma } from '@prisma/client';
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
+import { TrackFileFilter } from '../utils/track-file.filter';
 
+@ApiTags('tracks')
 @Controller('/tracks')
 export class TrackController {
   constructor(
@@ -24,23 +27,24 @@ export class TrackController {
   @UseInterceptors(FileFieldsInterceptor([
     { name: 'picture', maxCount: 1 },
     { name: 'audio', maxCount:1 }
-  ]))
+  ], { fileFilter: TrackFileFilter }))
   create(
-    @UploadedFiles() files, 
+    @UploadedFiles() files: { picture: Express.Multer.File[], audio: Express.Multer.File[] }, 
     @Body() data: Prisma.TrackCreateInput
   ) {
-    const { picture, audio } = files;
-    return this.trackService.create(data, picture[0], audio[0]);
+    return this.trackService.create(data, files);
   }
 
-  @Put(':id')
-  update(
-    @Param('id') id: string,
-    @Body() data: Prisma.TrackUpdateInput,
-  ): Promise<Track> {
-    return this.trackService.update({ data, where: { id: Number(id) } });
-  }
+  // @Put(':id')
+  // update(
+  //   @Param('id') id: string,
+  //   @Body() data: Prisma.TrackUpdateInput,
+  // ): Promise<Track> {
+  //   return this.trackService.update({ data, where: { id: Number(id) } });
+  // }
 
+  @ApiParam({ name: 'count', required: false })
+  @ApiParam({ name: 'offset', required: false })
   @Get()
   getTracks(
     @Query('count') count: string = '10',

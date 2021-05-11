@@ -1,7 +1,9 @@
 import { Controller, Post, Body, Delete, Param } from '@nestjs/common';
 import { CommentService } from './comment.service';
 import { Prisma, Comment } from '@prisma/client';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('comments')
 @Controller('/comments')
 export class CommentController {
   constructor(private commentService: CommentService) {}

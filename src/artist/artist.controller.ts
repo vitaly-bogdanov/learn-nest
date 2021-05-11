@@ -7,9 +7,11 @@ import {
   Body,
   Delete,
 } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { ArtistService } from './artist.service';
 import { Artist, Prisma } from '@prisma/client';
 
+@ApiTags('artists')
 @Controller('/artists')
 export class ArtistController {
   constructor(private artistService: ArtistService) {}

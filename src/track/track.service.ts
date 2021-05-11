@@ -15,11 +15,17 @@ export class TrackService {
 
   async create(
     data: Prisma.TrackCreateInput, 
-    picture: Express.Multer.File, 
-    audio:Express.Multer.File
+    files
   ): Promise<Track> {
-    const audioPath = this.fileService.createFile(FileType.AUDIO, audio);
-    const picturePath = this.fileService.createFile(FileType.IMAGE, picture);
+    let picturePath;
+    let audioPath;
+    const { picture, audio } = files;
+    if (picture) {
+      picturePath = this.fileService.createFile(FileType.IMAGE, picture[0]);
+    } 
+    if (audio) {
+      audioPath = this.fileService.createFile(FileType.AUDIO, audio[0]);
+    }
     const slug: string = this.slugifyService.toSlug(data.name);
     return this.prismaService.track.create({ data: {...data, slug, picture: picturePath, audio: audioPath } });
   }
@@ -27,8 +33,22 @@ export class TrackService {
   async update(params: {
     data: Prisma.TrackUpdateInput;
     where: Prisma.TrackWhereUniqueInput;
-  }): Promise<Track> {
+  }, files): Promise<Track> {
     const { data, where } = params;
+    const { picture, audio } = files;
+    const track = this.prismaService.track.findUnique({ where });
+    if (picture) {
+      // удалить старый файл
+      // записать новый
+      data.picture = '';
+    }
+
+    if (audio) {
+      // удалить старый файл
+      // записать новый
+      data.audio = '';
+    }
+
     return this.prismaService.track.update({ data, where });
   }
 

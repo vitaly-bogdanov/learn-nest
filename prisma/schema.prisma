@@ -28,8 +28,8 @@ model Track {
   id       Int       @id @default(autoincrement())
   listens  Int       @default(0)
   name     String
-  picture  String
-  audio    String
+  picture  String?
+  audio    String?
   slug     String
   artistId Int?
   albumId  Int?
