@@ -13,10 +13,7 @@ export class TrackService {
     private slugifyService: SlugifyService
   ) {}
 
-  async create(
-    data: Prisma.TrackCreateInput, 
-    files
-  ): Promise<Track> {
+  async create(data, files): Promise<Track> {
     let picturePath;
     let audioPath;
     const { picture, audio } = files;

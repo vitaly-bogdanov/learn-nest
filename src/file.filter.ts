@@ -1,6 +1,6 @@
 import { HttpException, HttpStatus } from '@nestjs/common';
 
-export const TrackFileFilter = (req, file, callback) => {
+export const FileFilter = (req, file, callback) => {
     if (file.fieldname === 'picture' && !file.originalname.match(/\.(jpg|jpeg|png|gif)$/)) {
       return callback(
         new HttpException(

@@ -12,7 +12,7 @@ import * as path from 'path';
     AlbumModule,
     ArtistModule,
     CommentModule,
-    ServeStaticModule.forRoot({ rootPath: path.resolve(__dirname, '..', 'static') })
+    ServeStaticModule.forRoot({ rootPath: path.resolve(__dirname, '..', 'static') }) // добавили статику
   ]
 })
 export class AppModule {}

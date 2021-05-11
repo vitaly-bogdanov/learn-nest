@@ -14,7 +14,10 @@ import { ApiTags, ApiParam} from '@nestjs/swagger';
 import { TrackService } from './track.service';
 import { Track, Prisma } from '@prisma/client';
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
-import { TrackFileFilter } from '../utils/track-file.filter';
+import { FileFilter } from '../file.filter';
+
+import { UploadTruckFilesDto } from './dto/upload-track-file.dto';
+import { CreateTrackDto } from './dto/create-track.dto';
 
 @ApiTags('tracks')
 @Controller('/tracks')
@@ -27,10 +30,10 @@ export class TrackController {
   @UseInterceptors(FileFieldsInterceptor([
     { name: 'picture', maxCount: 1 },
     { name: 'audio', maxCount:1 }
-  ], { fileFilter: TrackFileFilter }))
+  ], { fileFilter: FileFilter }))
   create(
-    @UploadedFiles() files: { picture: Express.Multer.File[], audio: Express.Multer.File[] }, 
-    @Body() data: Prisma.TrackCreateInput
+    @UploadedFiles() files: UploadTruckFilesDto, 
+    @Body() data: CreateTrackDto
   ) {
     return this.trackService.create(data, files);
   }
