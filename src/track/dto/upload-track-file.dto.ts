@@ -1,4 +1,4 @@
 export class UploadTruckFilesDto {
-    readonly audio?: Express.Multer.File[]
-    readonly picture?: Express.Multer.File[]
+    readonly audios?: Express.Multer.File[]
+    readonly pictures?: Express.Multer.File[]
 }

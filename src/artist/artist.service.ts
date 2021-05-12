@@ -11,6 +11,7 @@ export class ArtistService {
   ) {}
 
   async create(data: Prisma.ArtistCreateInput): Promise<Artist> {
+    console.log(data);
     const slug: string = this.slugifyService.toSlug(data.name);
     return this.prismaService.artist.create({ data: { ...data, slug } });
   }

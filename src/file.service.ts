@@ -28,8 +28,15 @@ export class FileService {
         }
     }
 
-    removeFile(fileName: string) {
-
+    removeFile(fileName: string | null): void {
+        if (!fileName) return;
+        try {
+            const filePath = path.resolve(__dirname, '..', 'static', fileName);
+            if (fs.existsSync(filePath)) {
+                fs.unlinkSync(filePath);
+            } 
+        } catch (error) {
+            throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
+        } 
     }
-
 }
