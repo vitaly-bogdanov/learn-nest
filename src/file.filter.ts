@@ -9,15 +9,14 @@ export const FileFilter = (req, file, callback) => {
         ),
         false,
       );
-    } 
-    // else if ( file.fieldname === 'audio' && !file.originalname.match(/\.(mp3|midi)$/)) {
-    //     return callback(
-    //         new HttpException(
-    //           'Невалидный файл для поля audio',
-    //           HttpStatus.BAD_REQUEST,
-    //         ),
-    //         false,
-    //     );
-    // }
+    } else if ( file.fieldname === 'audio' && !file.originalname.match(/\.(mp3|midi)$/)) {
+        return callback(
+            new HttpException(
+              'Невалидный файл для поля audio',
+              HttpStatus.BAD_REQUEST,
+            ),
+            false,
+        );
+    }
     callback(null, true);
 };

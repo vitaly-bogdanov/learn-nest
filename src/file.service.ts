@@ -28,7 +28,7 @@ export class FileService {
         }
     }
 
-    removeFile(fileName: string | null): void {
+    removeFile(fileName?: string): void {
         if (!fileName) return;
         try {
             const filePath = path.resolve(__dirname, '..', 'static', fileName);

@@ -39,28 +39,23 @@ export class TrackController {
   create(
     @UploadedFiles() files: UploadTruckFilesDto, 
     @Body() data: CreateTrackDto
-  ) {
-    let { name, albumId, artistId } = data;
-    let { pictures, audios } = files;
-    let pictureFile: Express.Multer.File, audioFile: Express.Multer.File;
-    albumId  && (albumId = Number(albumId));
-    artistId && (artistId = Number(artistId));
-    pictures && (pictureFile = pictures[0]);
-    audios   && (audioFile = audios[0]);
+  ): Promise<Track> {
+    const { name, albumId, artistId, pictureFile, audioFile } = this.preparationTrackParams(data, files);
     return this.trackService.create(name, albumId, artistId, pictureFile, audioFile);
   }
 
   @Put(':id')
   @UseInterceptors(FileFieldsInterceptor([
-    { name: 'picture', maxCount: 1 },
-    { name: 'audio', maxCount:1 }
+    { name: 'pictures', maxCount: 1 },
+    { name: 'audios', maxCount:1 }
   ], { fileFilter: FileFilter }))
   update(
     @Param('id') id: string,
     @UploadedFiles() files: UploadTruckFilesDto,
     @Body() data: UpdateTrackDto,
   ): Promise<Track> {
-    return this.trackService.update(data, Number(id), files);
+    const { name, albumId, artistId, pictureFile, audioFile } = this.preparationTrackParams(data, files);
+    return this.trackService.update(Number(id), name, albumId, artistId, pictureFile, audioFile);
   }
 
   @ApiParam({ name: 'count', required: false })
@@ -84,14 +79,27 @@ export class TrackController {
   }
 
   @Delete(':id')
-  delete(@Param('id') id: string, @Res() response: Response): void {
-    this.trackService.delete({ id: Number(id) });
-    response.status(HttpStatus.OK).send();
+  delete(@Param('id') id: FunctionStringCallback): Promise<void> {
+    return this.trackService.delete({ id: Number(id) });
   }
 
   @Put('listens/:id')
   listen(@Param('id') id: string, @Res() response: Response): void {
     this.trackService.listen(Number(id));
     response.status(HttpStatus.OK).send();
+  }
+
+  preparationTrackParams(
+    data: { name?: string, albumId?: any, artistId?: any },
+    files: { pictures?: Express.Multer.File[], audios?: Express.Multer.File[] }
+  ): { name?: string, pictureFile?: Express.Multer.File, audioFile?: Express.Multer.File, albumId?: number, artistId?: number  } {
+    let { name, albumId, artistId } = data;
+    let { pictures, audios } = files;
+    let pictureFile: Express.Multer.File, audioFile: Express.Multer.File;
+    albumId  && (albumId = Number(albumId));
+    artistId && (artistId = Number(artistId));
+    pictures && (pictureFile = pictures[0]);
+    audios   && (audioFile = audios[0]);
+    return { name, pictureFile, audioFile, albumId, artistId };
   }
 }
